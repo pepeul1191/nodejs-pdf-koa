@@ -21,7 +21,7 @@ async function create() {
 
 // create().catch(err => console.log(err));
 
-async function edit(name = 'Carlo Tevez') {
+async function edit(alumno) {
   const url = './tmp/Empty.pdf'
   const existingPdfBytes = await fs.readFileSync(url);
 
@@ -30,11 +30,20 @@ async function edit(name = 'Carlo Tevez') {
 
   const pages = pdfDoc.getPages()
   const firstPage = pages[0]
-  const { width, height } = firstPage.getSize()
-  firstPage.drawText(name, {
+  // const { width, height } = firstPage.getSize()
+  firstPage.drawText(alumno.nombre, {
     x: 300,
     y: 318,
     size: 19,
+    font: helveticaFont,
+    //color: rgb(0.95, 0.1, 0.1),
+    rotate: degrees(90),
+  })
+  const secondPage = pages[1]
+  secondPage.drawText(alumno.nota.toString(), {
+    x: 345,
+    y: 795,
+    size: 60,
     font: helveticaFont,
     //color: rgb(0.95, 0.1, 0.1),
     rotate: degrees(90),
@@ -50,7 +59,7 @@ var alumnos = [
     correo: 'pepe.valdivia.caballero@gmail.com',
     nota: 14,
   },
-  {
+  /*{
     nombre: 'Yacky Ramiréz',
     correo: 'pepe.valdivia.caballero@gmail.com',
     nota: 17,
@@ -59,11 +68,11 @@ var alumnos = [
     nombre: 'Sila Esculapia',
     correo: 'pepe.valdivia.caballero@gmail.com',
     nota: 20,
-  },
+  },*/
 ]
 
 alumnos.forEach(alumno => {
-  edit(alumno.nombre).catch(err => console.log(err));
+  edit(alumno).catch(err => console.log(err));
 });
 
 // edit('Yacky Ramirez Rodrigues').catch(err => console.log(err));

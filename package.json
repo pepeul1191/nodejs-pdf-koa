@@ -9,13 +9,18 @@
   },
   "engines": {
     "node": ">=15.0.0",
-    "npm": ">=6.0.0"
+    "npm": ">=7.5.4"
   },
   "author": "Pepe Valdivia",
   "license": "ISC",
   "dependencies": {
     "dotenv": "^8.2.0",
     "fs": "^0.0.1-security",
+    "koa": "^2.13.1",
+    "koa-body": "^4.2.0",
+    "koa-ejs": "^4.3.0",
+    "koa-session": "^6.1.0",
+    "koa-static": "^5.0.0",
     "nodemailer": "^6.4.18",
     "pdf-lib": "^1.16.0"
   },

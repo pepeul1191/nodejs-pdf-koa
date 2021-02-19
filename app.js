@@ -23,19 +23,15 @@ async function create() {
 
 // create().catch(err => console.log(err));
 
-async function sendEmail(email, pdf){
+async function sendEmail(email, nombre, attachedFile){
   dotenv.config();
-  console.log('1+++++++++++++++++++++++++++++++++++++++++++++++++')
-  console.log(process.env.MAIL_USER)
-  console.log(process.env.MAIL_PASS)
-  console.log('2+++++++++++++++++++++++++++++++++++++++++++++++++')
   let transporter = nodemailer.createTransport({
     secure: false,//true
     port: 25,//465
     logger: true,
     auth: {
-        user: process.env.MAIL_USER, // generated ethereal user
-        pass: process.env.MAIL_PASS, // generated ethereal password
+        user: process.env.MAIL_USER, 
+        pass: process.env.MAIL_PASS, 
     },
     service: 'gmail',
     tls: {
@@ -44,18 +40,23 @@ async function sendEmail(email, pdf){
   });
   // send mail with defined transport object
   let info = await transporter.sendMail({
-      from: '"Legis Juristas" <info@legisjuristas.com>', // sender address
-      to: email, // list of receivers
-      subject: "Welcome Email", // Subject line
-      //text: "Hello world?", // plain text body
-      html: "This email is sent through <b>GMAIL SMTP SERVER</b>", // html body
+    from: '"Legis Juristas" <info@legisjuristas.com>', // sender address
+    to: email, // list of receivers
+    subject: `Felicitaciones ${nombre}!!!`, // Subject line
+    //text: 'Hello world?', // plain text body
+    html: 'This email is sent through <b>GMAIL SMTP SERVER</b>', // html body
+    attachments: [
+      {   
+        path: attachedFile,
+      },
+    ],
   });
-  console.log("Message sent: %s", info.messageId);
+  console.log('Message sent: %s', info.messageId);
 }
 
 async function edit(alumno) {
-  const url = './tmp/Empty.pdf'
-  const existingPdfBytes = await fs.readFileSync(url);
+  const baseFile = './tmp/Empty.pdf'
+  const existingPdfBytes = await fs.readFileSync(baseFile);
 
   const pdfDoc = await PDFDocument.load(existingPdfBytes)
   const helveticaFont = await pdfDoc.embedFont(StandardFonts.Helvetica)
@@ -84,7 +85,7 @@ async function edit(alumno) {
   const pdfBytes = await pdfDoc.save();
   const file = `./tmp/${randomSN(5)}.pdf`;
   fs.writeFileSync(file, pdfBytes);
-  await sendEmail(alumno.correo, file)
+  await sendEmail(alumno.correo, alumno.nombre, file)
 }
 
 var alumnos = [

@@ -1,5 +1,5 @@
 import constants from './constants'
-import contents from './constants'
+import contents from './contents'
 
 // app middlewares
 

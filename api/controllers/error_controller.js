@@ -1,6 +1,7 @@
 import Router from 'koa-trie-router'
 import helpers from '../../config/helpers'
-//var errorHelper = require('../helpers/error_helper');
+import { accessCss, accessJs } from '../helpers/error_helper'
+import { getContent, getTitle } from '../../config/contents'
 import { getLanguage } from '../../config/middlewares'
 import constants from '../../config/constants'
 
@@ -18,11 +19,11 @@ router.get('/error/access/:num', [
     }
     let locals = {
       constants: constants.data,
-      title: `Èrror ${errorNumber}`,
+      title: getTitle()[lang]['error'],
       helpers: helpers,
-      // csss: errorHelper.accessCss(),
-      // jss: errorHelper.accessJs(),
-      // contents: contents.get('error')[lang][errorNumber],
+      csss: accessCss(),
+      jss: accessJs(),
+      contents: getContent('error')[lang][errorNumber],
       lang: lang,
     };
     await ctx.render('error/access', locals)

@@ -6,7 +6,8 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "node -r esm app.js",
-    "start:dev": "./node_modules/nodemon/bin/nodemon.js -r esm app.js --ignore './public/' --ignore './resources/'"
+    "start:dev": "./node_modules/nodemon/bin/nodemon.js -r esm app.js --ignore './public/' --ignore './resources/'",
+    "bower:install": "./node_modules/.bin/bower install"
   },
   "engines": {
     "node": ">=15.0.0",
@@ -28,6 +29,7 @@
     "pdf-lib": "^1.16.0"
   },
   "devDependencies": {
+    "bower": "^1.8.12",
     "esm": "^3.2.25",
     "nodemon": "^2.0.7"
   }

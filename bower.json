@@ -23,9 +23,9 @@
     "tests"
   ],
   "dependencies": {
-    "swp-backbone": "^1.0.3",
-    "requirejs": "^2.3.5",
-    "video.js": "^7.0.3",
-    "page": "^1.11.5"
+    "page": "^1.11.6",
+    "bootstrap": "^4.6.0",
+    "font-awesome": "^5.15.2",
+    "backbone": "^1.4.0"
   }
 }

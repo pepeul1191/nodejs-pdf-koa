@@ -8,14 +8,14 @@ import koaBody from 'koa-body'
 // const sockets = require('./config/sockets');
 import constants from './config/constants'
 import { preResponse, showLogs, internalErrorHandler, errorNotFoundHandler } from './config/middlewares'
-// const bootstrap = require('./config/bootstrap');
+import bootstrap from './config/bootstrap'
 // new app
-const app = new Koa();
-app.use(koaBody(constants.uploader_options));
-app.use(session(constants.session, app));
-app.keys = ['rnbfpzfuywmiwtfrrlomwlzlhdxfxjnfifzvkrloobswyoifkt'];
+const app = new Koa()
+app.use(koaBody(constants.uploader_options))
+app.use(session(constants.session, app))
+app.keys = ['rnbfpzfuywmiwtfrrlomwlzlhdxfxjnfifzvkrloobswyoifkt']
 // static files
-app.use(serveStatic(__dirname + '/public'));
+app.use(serveStatic(__dirname + '/public'))
 // views EJS
 render(app, {
   root: path.join(__dirname, 'views'),
@@ -23,15 +23,15 @@ render(app, {
   viewExt: 'ejs',
   cache: false,
   debug: false
-});
+})
 // middlewares
-app.use(preResponse());
-app.use(showLogs());
+app.use(preResponse())
+app.use(showLogs())
 // error 500 handler
-app.use(internalErrorHandler);
+app.use(internalErrorHandler)
 // forward routes
-// bootstrap(app);
+bootstrap(app)
 // error 404 handler
-app.use(errorNotFoundHandler);
+app.use(errorNotFoundHandler)
 // port
-app.listen(3001);
+app.listen(3000)

@@ -64,7 +64,7 @@ const errorNotFoundHandler = async (ctx, next) => {
   }
 }
 
-var internalErrorHandler = async function (ctx, next){
+const internalErrorHandler = async (ctx, next) => {
   try {
     await next();
   } catch (err) {
@@ -79,7 +79,7 @@ var internalErrorHandler = async function (ctx, next){
 
 // socket io middlewares
 
-var preResponseSocket = async function (ctx, next){
+const preResponseSocket = async (ctx, next) => {
   console.log('preResponseSocket middleware dice: ' + ctx.event);
   if(true){
     await next()

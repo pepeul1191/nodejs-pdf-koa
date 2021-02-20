@@ -47,11 +47,27 @@
   </nav>
   <!-- end-nav -->
   <div class="container-fluid">
-    hola
+    <br>
+    <h5>Aplicación Para Enviar Certificados</h5>
+    <br>
+    <div class="row">
+      <div class="col-md-3">
+        <div class="form-group">
+          <label for="inputFile">Archivo de Alumnos</label>
+          <input type="file" class="form-control-file" id="inputFile">
+        </div>
+      </div>
+      <div class="col-md-3">
+        <div class="form-group" style="padding-top: 25px;">
+          <button class="btn btn-success my-1" onclick="CSVtoTable(event)">Cargar Archivo</button>
+        </div>
+      </div>
+    </div>
   </div>
   <!-- JS -->
   <script type="text/javascript" src="/bower_components/jquery/dist/jquery.min.js"></script>
   <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.11.0/umd/popper.min.js"></script>
   <script type="text/javascript" src="/bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
+  <script type="text/javascript" src="/assets/js/app.js"></script>
 </body>
 </html>

@@ -6,8 +6,9 @@ import { getLanguage } from '../../config/middlewares'
 import constants from '../../config/constants'
 
 let router = new Router()
+let path = 'error'
 
-router.get('/error/access/:num', [
+router.get(`/${path}/access/:num`, [
   async (ctx, next) => {
     ctx.status = 404
     let lang = getLanguage(ctx)
@@ -28,6 +29,6 @@ router.get('/error/access/:num', [
     };
     await ctx.render('error/access', locals)
   }
-]);
+])
 
 export default router.middleware()

@@ -1,5 +1,5 @@
 import constants from './constants'
-import contents from './contents'
+import { getContent, getTitle } from './contents'
 
 // app middlewares
 
@@ -56,7 +56,7 @@ const errorNotFoundHandler = async (ctx, next) => {
       }else{ 
         ctx.set('Content-Type', 'text/html');
         ctx.status = 404;
-        ctx.body = contents.get('error')[lang].error_handler.post_404;
+        ctx.body = getContent('error')[lang].error_handler.post_404;
       }
     } else {
       await ctx.render('other_error');

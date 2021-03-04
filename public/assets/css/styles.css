@@ -9,6 +9,11 @@ footer{
   background: var(--primary-color) !important;
 }
 
+.container-fluid{
+  padding-right: 30px;
+  padding-left: 30px;
+}
+
 .footer-copyright{
   background: var(--secondary-color) !important;
 }

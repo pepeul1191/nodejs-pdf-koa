@@ -41,7 +41,7 @@ var AppView = Backbone.View.extend({
         $('#alertMessage').removeClass('alert-danger');
         $('#alertMessage').html('');
         $('#alertRow').addClass('no-height');
-      }, 2500);
+      }, 5000);
       return false
     }
     if(this.pdfType == null) {
@@ -52,7 +52,7 @@ var AppView = Backbone.View.extend({
         $('#alertMessage').removeClass('alert-danger');
         $('#alertMessage').html('');
         $('#alertRow').addClass('no-height');
-      }, 2500);
+      }, 5000);
       return false
     }
     this.students.reset();
@@ -67,6 +67,7 @@ var AppView = Backbone.View.extend({
           if(i != 0 && (allTextLines.length - 2) >= i){
             var dataArray = element.split(':');
             var student = new Student({
+              _id: i ,
               last_names: dataArray[0],
               first_names: dataArray[1],
               email: dataArray[2],
@@ -110,7 +111,7 @@ var AppView = Backbone.View.extend({
             <td>${student.get('grade')}</td>
             <td>
               <button type="button" class="btn btn-info">
-              <i class="fa fa-undo" aria-hidden="true"></i>
+              <i class="fa fa-undo" aria-hidden="true" model-id="${student.get('_id')}"></i>
                 Reennviar
               </button>
             </td>
@@ -149,7 +150,7 @@ var AppView = Backbone.View.extend({
             <td>${student.get('code')}</td>
             <td>
               <button type="button" class="btn btn-info">
-              <i class="fa fa-undo" aria-hidden="true"></i>
+              <i class="fa fa-undo" aria-hidden="true" model-id="${student.get('_id')}"></i>
                 Reennviar
               </button>
             </td>
@@ -174,7 +175,7 @@ var AppView = Backbone.View.extend({
         $('#alertMessage').removeClass('alert-danger');
         $('#alertMessage').html('');
         $('#alertRow').addClass('no-height');
-      }, 2500);
+      }, 5000);
     }else{
       this.basePDF = inputFile[0].files[0];
     }
@@ -188,10 +189,40 @@ var AppView = Backbone.View.extend({
         $('#alertMessage').removeClass('alert-danger');
         $('#alertMessage').html('');
         $('#alertRow').addClass('no-height');
-      }, 2500);
+      }, 5000);
     }else{
-
+      // send pdf
+      var _this = this;
+      var form_data = new FormData();
+      form_data.append('pdf_file', _this.basePDF);
+      $.ajax({
+        type: 'POST',
+        url: BASE_URL + 'student/upload',
+        headers: {
+          // [CSRF_KEY]: CSRF,
+        },
+        data: form_data,
+        //use contentType, processData for sure.
+        contentType: false,
+        processData: false,
+        async: false,
+        beforeSend: function() {
+        },
+        success: function(data) {
+          var resp = JSON.parse(data);
+          _this.sendBySockets(`${resp.folder}${resp.name}`);
+        },
+        error: function(xhr, status, error){
+          console.error(xhr.responseText);
+          resp.status = xhr.status;
+          resp.message = xhr.responseText;
+        }
+      });
+      // create websockets
     }
+  },
+  sendBySockets: function(file){
+
   },
 });
 

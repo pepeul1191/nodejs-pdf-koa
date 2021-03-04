@@ -1,8 +1,24 @@
 import Router from 'koa-trie-router'
-import { sendPDF } from '../helpers/student_helper'
+import helpers from '../../config/helpers'
+import { sendPDF, indexCss, indexJs } from '../helpers/student_helper'
+import constants from '../../config/constants'
 
 let router = new Router()
 let path = 'student'
+
+router.get(`/${path}`, [
+  async (ctx, next) => {
+    let locals = {
+      constants: constants.data,
+      title: 'Gestión de envios de PDFs',
+      helpers: helpers,
+      csss: indexCss(),
+      jss: indexJs(),
+      contents: {},
+    };
+    await ctx.render('student/index', locals)
+  }
+]);
 
 router.post(`/${path}/send_pdfs`, [
   //middlewares.sessionRequiredFalse, 

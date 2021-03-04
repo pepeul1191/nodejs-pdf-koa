@@ -25,8 +25,9 @@
   "dependencies": {
     "page": "^1.11.6",
     "bootstrap": "^4.6.0",
-    "font-awesome": "^5.15.2",
+    "font-awesome": "^4.7.0",
     "backbone": "^1.4.0",
-    "popper.js": "^2.7.2"
+    "popper.js": "^2.7.2",
+    "jquery": "^3.6.0"
   }
 }

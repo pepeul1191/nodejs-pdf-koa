@@ -2,6 +2,7 @@ import { PDFDocument, StandardFonts, degrees } from 'pdf-lib'
 import fs from 'fs'
 import dotenv from 'dotenv'
 import nodemailer from 'nodemailer'
+import constants from '../../config/constants'
 import { randomSN } from '../../config/helpers'
 
 async function sendEmail(email, nombre, attachedFile){
@@ -67,6 +68,44 @@ export async function sendPDF(student) {
   await sendEmail(student.email, `${student.last_names} ${student.first_name}`, file)
 }
 
+export const indexCss = () => {
+  var rpta = [];
+  if(constants.data.static == 'dev'){
+    rpta = [
+      'bower_components/bootstrap/dist/css/bootstrap.min',
+      'bower_components/font-awesome/css/font-awesome.min',
+      'assets/css/constants',
+      'assets/css/styles',
+    ];
+  }
+  if(constants.data.static == 'produccion'){
+    rpta = [
+      'dist/test.min'
+    ];
+  }
+  return rpta;
+}
+
+export const indexJs = () => {
+  var rpta = [];
+  if(constants.data.static == 'dev'){
+    rpta = [
+      'bower_components/jquery/dist/jquery.min',
+      'bower_components/bootstrap/dist/js/bootstrap.min',
+      'bower_components/underscore/underscore-min',
+      'bower_components/backbone/backbone-min',
+      'assets/js/app',
+    ];
+  }
+  if(constants.data.static == 'produccion'){
+    rpta = [
+    ];
+  }
+  return rpta;
+}
+
 export default {
   sendPDF,
+  indexCss,
+  indexJs,
 }

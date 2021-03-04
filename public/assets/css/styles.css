@@ -58,3 +58,31 @@ footer > .container > .row > .col-md-3 > ul > li > a, .footer-copyright > b > a{
 .form-group > label{
   width: 100%;
 }
+
+.btn > i{
+  margin-right: 10px;
+}
+
+label, .btn{
+  font-weight: 300;
+}
+
+.no-height{
+  height:0px;
+}
+
+.form-group > .radio{
+  margin-top: 10px;
+}
+
+.radio > .radio-inline:not(:last-child){
+  margin-right: 20%;
+}
+
+.radio-inline > input{
+  margin-right: 10px;
+}
+
+td{
+  font-weight: 300;
+}

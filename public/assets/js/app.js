@@ -1,3 +1,209 @@
+// Backbone Models and Collections and View
+var Student = Backbone.Model.extend({
+	defaults: {
+		first_names: '',
+    last_names: '',
+    email: '',
+    grade: '',
+    code: '',
+	}
+});
+ 
+var StudentCollection = Backbone.Collection.extend({
+	model: Student
+});
+
+var AppView = Backbone.View.extend({
+  students: new StudentCollection(),
+  basePDF: null,
+  pdfType: null,
+  el: '#app',
+  render: function() {
+    
+  },
+  events: {
+    'change input[name=optType]': 'changedType',
+    'click #btnSend': 'send',
+    'click #btnLoadCSV': 'loadCSV',
+    'change #inputFilePDF': 'selectPDF',
+  },
+  changedType: function(event){
+    this.pdfType = event.target.value;
+  },
+  loadCSV: function(event){
+    var inputFile = $('#inputFileCSV');
+    var ext = inputFile.val().split('.').pop().toLowerCase();
+    if($.inArray(ext, ['csv']) == -1) {
+      $('#alertMessage').addClass('alert-danger');
+      $('#alertMessage').html('Debe de seleccionar un el archivo CSV con la información de los alumnos');
+      $('#alertRow').removeClass('no-height');
+      setInterval(() => {
+        $('#alertMessage').removeClass('alert-danger');
+        $('#alertMessage').html('');
+        $('#alertRow').addClass('no-height');
+      }, 2500);
+      return false
+    }
+    if(this.pdfType == null) {
+      $('#alertMessage').addClass('alert-danger');
+      $('#alertMessage').html('Debe de seleccionar Tipo de Certificado a emitir');
+      $('#alertRow').removeClass('no-height');
+      setInterval(() => {
+        $('#alertMessage').removeClass('alert-danger');
+        $('#alertMessage').html('');
+        $('#alertRow').addClass('no-height');
+      }, 2500);
+      return false
+    }
+    this.students.reset();
+    if (inputFile.prop('files')[0] != undefined) {
+      var reader = new FileReader();
+      var _this = this;
+      reader.onload = function(e) {
+        fileContent = reader.result;
+        var allTextLines = fileContent.split(/\r\n|\n/);
+        var i = 0;
+        allTextLines.forEach(element => {
+          if(i != 0 && (allTextLines.length - 2) >= i){
+            var dataArray = element.split(':');
+            var student = new Student({
+              last_names: dataArray[0],
+              first_names: dataArray[1],
+              email: dataArray[2],
+              grade: dataArray[3],
+            });
+            _this.students.add(student);  
+          }
+          i++;
+        });
+        _this.showTable();
+      }
+      reader.readAsText(inputFile.prop('files')[0], 'UTF-8');
+    }
+  },
+  showTable: function(){
+    $('#studentTable').empty();
+    var tbody = '';
+    if(this.pdfType == 'certified'){
+      tbody = `
+        <thead>
+          <tr>
+            <th scope="col">#</th>
+            <th scope="col">Apellidos</th>
+            <th scope="col">Nombres</th>
+            <th scope="col">Correo</th>
+            <th scope="col">Nota</th>
+            <th scope="col">Acciones</th>
+            <th scope="col">Resultado</th>
+          </tr>
+        </thead>
+        <tbody>
+      `;
+      var i = 0;
+      this.students.forEach(student => {
+        tbody += `
+          <tr>
+            <th>${++i}</th>
+            <td>${student.get('last_names')}</td>
+            <td>${student.get('first_names')}</td>
+            <td>${student.get('email')}</td>
+            <td>${student.get('grade')}</td>
+            <td>
+              <button type="button" class="btn btn-info">
+              <i class="fa fa-undo" aria-hidden="true"></i>
+                Reennviar
+              </button>
+            </td>
+            <td>Envio Pendiente</td>
+          </tr>
+        `;
+      });
+      tbody += `
+        </tbody>
+      `;
+    }else if(this.pdfType == 'course'){
+      tbody = `
+        <thead>
+          <tr>
+            <th scope="col">#</th>
+            <th scope="col">Apellidos</th>
+            <th scope="col">Nombres</th>
+            <th scope="col">Correo</th>
+            <th scope="col">Nota</th>
+            <th scope="col">Registro</th>
+            <th scope="col">Acciones</th>
+            <th scope="col">Resultado</th>
+          </tr>
+        </thead>
+        <tbody>
+      `;
+      var i = 0;
+      this.students.forEach(student => {
+        tbody += `
+          <tr>
+            <th>${++i}</th>
+            <td>${student.get('last_names')}</td>
+            <td>${student.get('first_names')}</td>
+            <td>${student.get('email')}</td>
+            <td>${student.get('grade')}</td>
+            <td>${student.get('code')}</td>
+            <td>
+              <button type="button" class="btn btn-info">
+              <i class="fa fa-undo" aria-hidden="true"></i>
+                Reennviar
+              </button>
+            </td>
+            <td>Envio Pendiente</td>
+          </tr>
+        `;
+      });
+      tbody += `
+        </tbody>
+      `;
+    }
+    $('#studentTable').append(tbody);
+  },
+  selectPDF: function(event){
+    var inputFile = $('#inputFilePDF');
+    var ext = inputFile.val().split('.').pop().toLowerCase();
+    if($.inArray(ext, ['pdf']) == -1) {
+      $('#alertMessage').addClass('alert-danger');
+      $('#alertMessage').html('Debe de seleccionar un el archivo PDF del certificado');
+      $('#alertRow').removeClass('no-height');
+      setInterval(() => {
+        $('#alertMessage').removeClass('alert-danger');
+        $('#alertMessage').html('');
+        $('#alertRow').addClass('no-height');
+      }, 2500);
+    }else{
+      this.basePDF = inputFile[0].files[0];
+    }
+  },
+  send: function(event){
+    if(this.pdfType == null){
+      $('#alertMessage').addClass('alert-danger');
+      $('#alertMessage').html('Debe de seleccionar Tipo de Certificado a emitir');
+      $('#alertRow').removeClass('no-height');
+      setInterval(() => {
+        $('#alertMessage').removeClass('alert-danger');
+        $('#alertMessage').html('');
+        $('#alertRow').addClass('no-height');
+      }, 2500);
+    }else{
+
+    }
+  },
+});
+
+var StudenTable = Backbone.View.extend({
+  model: StudentCollection,
+  el: 'studentsRow',
+  render: function() {
+    
+  },
+});
+
+// form actions
 
 function CSVtoTable(event){
   var inputFile = $('#inputFile');
@@ -12,19 +218,22 @@ function CSVtoTable(event){
       fileContent = reader.result;
       var allTextLines = fileContent.split(/\r\n|\n/);
       var i = 0;
-      var students = [];
+      var students = new StudentCollection();
       allTextLines.forEach(element => {
         if(i != 0 && (allTextLines.length - 2) >= i){
           var dataArray = element.split(':');
-          students.push({
+          var student = new Student({
             last_names: dataArray[0],
             first_names: dataArray[1],
             email: dataArray[2],
             grade: dataArray[3],
-          })
+          });
+          students.add(student);  
         }
         i++;
       });
+      console.log(students)
+      /*
       $.ajax({
         url: 'http://localhost:3000/student/send_pdfs',
         type: 'POST',
@@ -39,8 +248,18 @@ function CSVtoTable(event){
           console.log(data)
         }
       });
+      */
     }
     reader.readAsText(inputFile.prop('files')[0], 'UTF-8');
   }
   return false;
 }
+
+function sendPDFs(){
+  var table = new StudenTable();
+  table.render();
+}
+
+$(document).ready(function() {
+  var app = new AppView();
+});

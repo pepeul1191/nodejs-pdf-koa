@@ -105,17 +105,17 @@ var AppView = Backbone.View.extend({
       var i = 0;
       this.students.forEach(student => {
         tbody += `
-          <tr>
+          <tr model-id="${student.get('_id')}">
             <th>${++i}</th>
             <td>${student.get('last_names')}</td>
             <td>${student.get('first_names')}</td>
             <td>${student.get('email')}</td>
             <td>${student.get('grade')}</td>
             <td>
-              <button type="button" class="btn btn-info">
-              <i class="fa fa-undo" aria-hidden="true" model-id="${student.get('_id')}"></i>
-                Reennviar
-              </button>
+              <button type="button" class="btn btn-info btn-resend">
+                <i class="fa fa-undo" aria-hidden="true"></i>
+                  Reennviar
+                </button>
             </td>
             <td>Envio Pendiente</td>
           </tr>
@@ -143,7 +143,7 @@ var AppView = Backbone.View.extend({
       var i = 0;
       this.students.forEach(student => {
         tbody += `
-          <tr>
+          <tr model-id="${student.get('_id')}">
             <th>${++i}</th>
             <td>${student.get('last_names')}</td>
             <td>${student.get('first_names')}</td>
@@ -151,9 +151,9 @@ var AppView = Backbone.View.extend({
             <td>${student.get('grade')}</td>
             <td>${student.get('code')}</td>
             <td>
-              <button type="button" class="btn btn-info">
-              <i class="fa fa-undo" aria-hidden="true" model-id="${student.get('_id')}"></i>
-                Reennviar
+              <button type="button" class="btn btn-info btn-resend">
+                <i class="fa fa-undo" aria-hidden="true"></i>
+                  Reennviar
               </button>
             </td>
             <td>Envio Pendiente</td>
@@ -238,10 +238,17 @@ var AppView = Backbone.View.extend({
       },
       async: false,
       beforeSend: function() {
-
+        $("#btnSend").prop("disabled", true);
+        $(".btn-resend").prop("disabled", true);
       },
       success: function(data) {
-        console.log(data)
+        var respData = JSON.parse(data);
+        respData.forEach(data => {
+          var tr = $("tr[model-id='" + data._id +"']");
+          tr.children().last().html('Enviado')
+        });
+        $("#btnSend").prop("disabled", false);
+        $(".btn-resend").prop("disabled", false);
       }
     });
   },

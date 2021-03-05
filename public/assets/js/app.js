@@ -18,6 +18,8 @@ var AppView = Backbone.View.extend({
   basePDF: null,
   pdfType: null,
   el: '#app',
+  initialize: function(){
+  },
   render: function() {
     
   },
@@ -210,7 +212,7 @@ var AppView = Backbone.View.extend({
         },
         success: function(data) {
           var resp = JSON.parse(data);
-          _this.sendBySockets(`${resp.folder}${resp.name}`);
+          _this.sendStudents(resp.folder, resp.name);
         },
         error: function(xhr, status, error){
           console.error(xhr.responseText);
@@ -221,8 +223,27 @@ var AppView = Backbone.View.extend({
       // create websockets
     }
   },
-  sendBySockets: function(file){
+  sendStudents: function(folder, basePDF){
+    var _this = this;
+    $.ajax({
+      url: BASE_URL + 'student/send',
+      type: 'POST',
+      data: {
+        data: JSON.stringify(_this.students.toJSON()),
+        file: basePDF,
+        folder: folder,
+      },
+      headers: {
+        // [CSRF_KEY]: CSRF,
+      },
+      async: false,
+      beforeSend: function() {
 
+      },
+      success: function(data) {
+        console.log(data)
+      }
+    });
   },
 });
 
@@ -292,5 +313,5 @@ function sendPDFs(){
 }
 
 $(document).ready(function() {
-  var app = new AppView();
+  new AppView();
 });

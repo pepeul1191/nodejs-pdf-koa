@@ -65,4 +65,35 @@ router.post(`/${path}/upload`, [
   }
 ]);
 
+router.post(`/${path}/send`, [
+  //middlewares.sessionRequiredFalse,
+  async (ctx, next) => {
+    var resp = [];
+    try {
+      var students = JSON.parse(ctx.request.body.data)
+      var baseFile = ctx.request.body.file
+      var folder = ctx.request.body.folder
+      students.forEach(student => {
+        var status = 'ok';
+        try {
+          sendPDF(student, folder, baseFile)
+        }catch{
+          status = 'error'
+        }
+        resp.push({
+          _id: student._id,
+          status: status,
+        })
+      })
+      resp = JSON.stringify(resp)
+    } catch (err) {
+      ctx.throw(500, err);
+    }
+    // response
+    ctx.set('Content-Type', 'text/html; charset=utf-8');
+    ctx.status = 200;
+    ctx.body = resp;
+  }
+]);
+
 export default router.middleware()

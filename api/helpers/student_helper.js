@@ -36,15 +36,14 @@ async function sendEmail(email, nombre, attachedFile){
   console.log('Message sent: %s', info.messageId);
 }
 
-export async function sendPDF(student) {
-  const baseFile = './tmp/Empty.pdf'
-  const existingPdfBytes = await fs.readFileSync(baseFile);
+export async function sendPDF(student, folder, baseFile) {
+  const existingPdfBytes = await fs.readFileSync(`${folder}${baseFile}`);
   const pdfDoc = await PDFDocument.load(existingPdfBytes)
   const helveticaFont = await pdfDoc.embedFont(StandardFonts.Helvetica)
   const pages = pdfDoc.getPages()
   const firstPage = pages[0]
   // const { width, height } = firstPage.getSize()
-  firstPage.drawText(`${student.last_names} ${student.first_name}`, {
+  firstPage.drawText(`${student.last_names} ${student.first_names}`, {
     x: 300,
     y: 318,
     size: 19,
@@ -61,11 +60,10 @@ export async function sendPDF(student) {
     //color: rgb(0.95, 0.1, 0.1),
     rotate: degrees(90),
   })
-
   const pdfBytes = await pdfDoc.save();
-  const file = `./tmp/${randomSN(5)}.pdf`;
+  const file = `${folder}${student.last_names} ${student.first_names}.pdf`;
   fs.writeFileSync(file, pdfBytes);
-  await sendEmail(student.email, `${student.last_names} ${student.first_name}`, file)
+  await sendEmail(student.email, `${student.last_names} ${student.first_names}`, file)
 }
 
 export const indexCss = () => {

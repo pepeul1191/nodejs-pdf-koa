@@ -1,12 +1,26 @@
 html {
   font-size:0.95rem !important;
+  background: #f1f1f1;
 }
 
 footer{
   border-top: soild rgba(0,0,0,.5) 2px;
-  color: #FDFDFD;
+  color: #A9A9A9;
   margin-top: 25px;
-  background: var(--primary-color) !important;
+  text-align: right;
+  background: #f1f1f1;
+  font-weight: 400;
+  padding-top: 10px;
+  margin-right: 20px;
+}
+
+footer > a{
+  border-top: soild rgba(0,0,0,.5) 2px;
+  color: #343434;
+  margin-top: 25px;
+  text-align: right;
+  background: #f1f1f1;
+  font-weight: 400;
 }
 
 .container-fluid{
@@ -90,4 +104,8 @@ label, .btn{
 
 td{
   font-weight: 300;
+}
+
+#app{
+  background: white;
 }

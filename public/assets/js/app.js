@@ -16,6 +16,8 @@ var StudentCollection = Backbone.Collection.extend({
 var AppView = Backbone.View.extend({
   students: new StudentCollection(),
   basePDF: null,
+  folderPDF: null,
+  basePDFUploaded: null,
   pdfType: null,
   el: '#app',
   initialize: function(){
@@ -28,6 +30,7 @@ var AppView = Backbone.View.extend({
     'click #btnSend': 'send',
     'click #btnLoadCSV': 'loadCSV',
     'change #inputFilePDF': 'selectPDF',
+    'click .btn-resend': 'resend',
   },
   changedType: function(event){
     this.pdfType = event.target.value;
@@ -69,7 +72,7 @@ var AppView = Backbone.View.extend({
           if(i != 0 && (allTextLines.length - 2) >= i){
             var dataArray = element.split(':');
             var student = new Student({
-              _id: i ,
+              id: i ,
               last_names: dataArray[0],
               first_names: dataArray[1],
               email: dataArray[2],
@@ -105,7 +108,7 @@ var AppView = Backbone.View.extend({
       var i = 0;
       this.students.forEach(student => {
         tbody += `
-          <tr model-id="${student.get('_id')}">
+          <tr model-id="${student.get('id')}">
             <th>${++i}</th>
             <td>${student.get('last_names')}</td>
             <td>${student.get('first_names')}</td>
@@ -142,8 +145,9 @@ var AppView = Backbone.View.extend({
       `;
       var i = 0;
       this.students.forEach(student => {
+        console.log(student)
         tbody += `
-          <tr model-id="${student.get('_id')}">
+          <tr model-id="${student.get('id')}">
             <th>${++i}</th>
             <td>${student.get('last_names')}</td>
             <td>${student.get('first_names')}</td>
@@ -182,6 +186,71 @@ var AppView = Backbone.View.extend({
       this.basePDF = inputFile[0].files[0];
     }
   },
+  resend: function(event){
+    var modelId = event.target.parentElement.parentElement.getAttribute('model-id');
+    var student = this.students.get(modelId);
+    if(this.folderPDF == null || this.basePDFUploaded == null){
+      var _this = this;
+      var form_data = new FormData();
+      form_data.append('pdf_file', _this.basePDF);
+      $.ajax({
+        type: 'POST',
+        url: BASE_URL + 'student/upload',
+        headers: {
+          // [CSRF_KEY]: CSRF,
+        },
+        data: form_data,
+        //use contentType, processData for sure.
+        contentType: false,
+        processData: false,
+        async: false,
+        beforeSend: function() {
+        },
+        success: function(data) {
+          var resp = JSON.parse(data);
+          _this.folderPDF = resp.folder;
+          _this.basePDFUploaded = resp.name;
+          _this.sendStudent(student);
+        },
+        error: function(xhr, status, error){
+          console.error(xhr.responseText);
+          resp.status = xhr.status;
+          resp.message = xhr.responseText;
+        }
+      });
+    }else{
+      this.sendStudent(student);
+    }
+  },
+  sendStudent: function(student){
+    var _this = this;
+    $.ajax({
+      url: BASE_URL + 'student/send',
+      type: 'POST',
+      data: {
+        data: JSON.stringify([student.toJSON()]),
+        file: _this.basePDFUploaded,
+        folder: _this.folderPDF,
+      },
+      headers: {
+        // [CSRF_KEY]: CSRF,
+      },
+      async: true,
+      beforeSend: function() {
+        $("#btnSend").prop("disabled", true);
+        $(".btn-resend").prop("disabled", true);
+      },
+      success: function(data) {
+        var respData = JSON.parse(data);
+        respData.forEach(data => {
+          var tr = $("tr[model-id='" + data._id +"']");
+          tr.children().last().html('Enviado')
+        });
+        $("#btnSend").prop("disabled", false);
+        $(".btn-resend").prop("disabled", false);
+      }
+    });
+  },
   send: function(event){
     if(this.pdfType == null){
       $('#alertMessage').addClass('alert-danger');
@@ -212,7 +281,9 @@ var AppView = Backbone.View.extend({
         },
         success: function(data) {
           var resp = JSON.parse(data);
-          _this.sendStudents(resp.folder, resp.name);
+          _this.folderPDF = resp.folder;
+          _this.basePDFUploaded = resp.name;
+          _this.sendStudents();
         },
         error: function(xhr, status, error){
           console.error(xhr.responseText);
@@ -230,8 +301,8 @@ var AppView = Backbone.View.extend({
       type: 'POST',
       data: {
         data: JSON.stringify(_this.students.toJSON()),
-        file: basePDF,
-        folder: folder,
+        file: _this.basePDFUploaded,
+        folder: _this.folderPDF,
       },
       headers: {
         // [CSRF_KEY]: CSRF,

@@ -3,9 +3,10 @@ import fs from 'fs'
 import dotenv from 'dotenv'
 import nodemailer from 'nodemailer'
 import constants from '../../config/constants'
-import { randomSN } from '../../config/helpers'
+import mailTemplate from '../../views/mails/congratulaion'
+import _ from 'underscore'
 
-async function sendEmail(email, nombre, attachedFile){
+async function sendEmail(email, name, attachedFile){
   dotenv.config();
   let transporter = nodemailer.createTransport({
     secure: false,//true
@@ -20,13 +21,17 @@ async function sendEmail(email, nombre, attachedFile){
       rejectUnauthorized: false
     }
   });
+  // template
+  var compiled = _.template(mailTemplate);
   // send mail with defined transport object
   let info = await transporter.sendMail({
     from: '"Legis Juristas" <info@legisjuristas.com>', // sender address
     to: email, // list of receivers
-    subject: `Felicitaciones ${nombre}!!!`, // Subject line
+    subject: `Felicitaciones ${name}!!!`, // Subject line
     //text: 'Hello world?', // plain text body
-    html: 'This email is sent through <b>GMAIL SMTP SERVER</b>', // html body
+    html: compiled({
+      name: name
+    }), // html body
     attachments: [
       {   
         path: attachedFile,

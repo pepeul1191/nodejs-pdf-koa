@@ -4,7 +4,6 @@ import render from 'koa-ejs'
 import session from 'koa-session'
 import path from 'path'
 import koaBody from 'koa-body'
-import IO from 'koa-socket-2'
 // export configs
 // import sockets from './config/sockets'
 import constants from './config/constants'
@@ -12,7 +11,6 @@ import { preResponse, showLogs, internalErrorHandler, errorNotFoundHandler } fro
 import bootstrap from './config/bootstrap'
 // new app
 const app = new Koa()
-const io = new IO();
 app.use(koaBody(constants.uploader_options))
 app.use(session(constants.session, app))
 app.keys = ['rnbfpzfuywmiwtfrrlomwlzlhdxfxjnfifzvkrloobswyoifkt']

@@ -236,7 +236,7 @@ var AppView = Backbone.View.extend({
       headers: {
         // [CSRF_KEY]: CSRF,
       },
-      async: false,
+      async: true,
       beforeSend: function() {
         $("#btnSend").prop("disabled", true);
         $(".btn-resend").prop("disabled", true);

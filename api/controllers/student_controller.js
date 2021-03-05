@@ -73,10 +73,10 @@ router.post(`/${path}/send`, [
       var students = JSON.parse(ctx.request.body.data)
       var baseFile = ctx.request.body.file
       var folder = ctx.request.body.folder
-      students.forEach(student => {
+      for await (const student of students) {
         var status = 'ok';
         try {
-          sendPDF(student, folder, baseFile)
+          await sendPDF(student, folder, baseFile)
         }catch{
           status = 'error'
         }
@@ -84,7 +84,7 @@ router.post(`/${path}/send`, [
           _id: student._id,
           status: status,
         })
-      })
+      }
       resp = JSON.stringify(resp)
     } catch (err) {
       ctx.throw(500, err);

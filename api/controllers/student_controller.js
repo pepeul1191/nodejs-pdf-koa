@@ -71,12 +71,13 @@ router.post(`/${path}/send`, [
     var resp = [];
     try {
       var students = JSON.parse(ctx.request.body.data)
+      var type = ctx.request.body.type
       var baseFile = ctx.request.body.file
       var folder = ctx.request.body.folder
       for await (const student of students) {
         var status = 'ok';
         try {
-          await sendPDF(student, folder, baseFile)
+          await sendPDF(student, folder, baseFile, type)
         }catch{
           status = 'error'
         }

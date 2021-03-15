@@ -269,6 +269,7 @@ var AppView = Backbone.View.extend({
         data: JSON.stringify([student.toJSON()]),
         file: _this.basePDFUploaded,
         folder: _this.folderPDF,
+        type: _this.pdfType,
       },
       headers: {
         // [CSRF_KEY]: CSRF,

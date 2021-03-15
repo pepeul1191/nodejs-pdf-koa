@@ -6,7 +6,7 @@ import constants from '../../config/constants'
 import mailTemplate from '../../views/mails/congratulaion'
 import _ from 'underscore'
 
-async function sendEmail(email, name, attachedFile){
+async function sendEmail(email, name, attachedFile, type){
   dotenv.config();
   let transporter = nodemailer.createTransport({
     secure: false,//true
@@ -41,13 +41,14 @@ async function sendEmail(email, name, attachedFile){
   console.log('Message sent: %s', info.messageId);
 }
 
-export async function sendPDF(student, folder, baseFile) {
+export async function sendPDF(student, folder, baseFile, type) {
   const existingPdfBytes = await fs.readFileSync(`${folder}${baseFile}`);
   const pdfDoc = await PDFDocument.load(existingPdfBytes)
   const helveticaFont = await pdfDoc.embedFont(StandardFonts.Helvetica)
   const pages = pdfDoc.getPages()
   const firstPage = pages[0]
   // const { width, height } = firstPage.getSize()
+  // student name -> certified, course, free-course
   firstPage.drawText(`${student.last_names} ${student.first_names}`, {
     x: 300,
     y: 318,
@@ -57,18 +58,32 @@ export async function sendPDF(student, folder, baseFile) {
     rotate: degrees(90),
   })
   const secondPage = pages[1]
-  secondPage.drawText(student.grade.toString(), {
-    x: 345,
-    y: 795,
-    size: 60,
-    font: helveticaFont,
-    //color: rgb(0.95, 0.1, 0.1),
-    rotate: degrees(90),
-  })
+  // student grade -> certificate, course
+  if(type == 'certified'){
+    secondPage.drawText(student.grade.toString(), {
+      x: 345,
+      y: 795,
+      size: 60,
+      font: helveticaFont,
+      //color: rgb(0.95, 0.1, 0.1),
+      rotate: degrees(90),
+    })
+  }
+  // student code -> certified, course
+  if(type == 'certified' || type == 'course'){
+    secondPage.drawText(student.code.toString(), {
+      x: 345,
+      y: 695,
+      size: 60,
+      font: helveticaFont,
+      //color: rgb(0.95, 0.1, 0.1),
+      rotate: degrees(90),
+    })
+  }
   const pdfBytes = await pdfDoc.save();
   const file = `${folder}${student.last_names} ${student.first_names}.pdf`;
   fs.writeFileSync(file, pdfBytes);
-  await sendEmail(student.email, `${student.last_names} ${student.first_names}`, file)
+  await sendEmail(student.email, `${student.last_names} ${student.first_names}`, file, type)
 }
 
 export const indexCss = () => {

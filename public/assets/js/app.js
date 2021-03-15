@@ -26,7 +26,8 @@ var AppView = Backbone.View.extend({
     
   },
   events: {
-    'change input[name=optType]': 'changedType',
+    // 'change input[name=optType]': 'changedType',
+    'change #slcType': 'changedType', 
     'click #btnSend': 'send',
     'click #btnLoadCSV': 'loadCSV',
     'change #inputFilePDF': 'selectPDF',
@@ -77,6 +78,7 @@ var AppView = Backbone.View.extend({
               first_names: dataArray[1],
               email: dataArray[2],
               grade: dataArray[3],
+              code: dataArray[4],
             });
             _this.students.add(student);  
           }
@@ -98,7 +100,8 @@ var AppView = Backbone.View.extend({
             <th scope="col">Apellidos</th>
             <th scope="col">Nombres</th>
             <th scope="col">Correo</th>
-            <th scope="col">Nota</th>
+            <th class="text-center" scope="col">Nota</th>
+            <th class="text-center" scope="col">Cód. de Registro</th>
             <th scope="col">Acciones</th>
             <th scope="col">Resultado</th>
           </tr>
@@ -113,7 +116,8 @@ var AppView = Backbone.View.extend({
             <td>${student.get('last_names')}</td>
             <td>${student.get('first_names')}</td>
             <td>${student.get('email')}</td>
-            <td>${student.get('grade')}</td>
+            <td class="text-center">${student.get('grade')}</td>
+            <td class="text-center">${student.get('code')}</td>
             <td>
               <button type="button" class="btn btn-info btn-resend">
                 <i class="fa fa-undo" aria-hidden="true"></i>
@@ -135,8 +139,7 @@ var AppView = Backbone.View.extend({
             <th scope="col">Apellidos</th>
             <th scope="col">Nombres</th>
             <th scope="col">Correo</th>
-            <th scope="col">Nota</th>
-            <th scope="col">Registro</th>
+            <th class="text-center" scope="col">Registro</th>
             <th scope="col">Acciones</th>
             <th scope="col">Resultado</th>
           </tr>
@@ -152,8 +155,7 @@ var AppView = Backbone.View.extend({
             <td>${student.get('last_names')}</td>
             <td>${student.get('first_names')}</td>
             <td>${student.get('email')}</td>
-            <td>${student.get('grade')}</td>
-            <td>${student.get('code')}</td>
+            <td class="text-center">${student.get('code')}</td>
             <td>
               <button type="button" class="btn btn-info btn-resend">
                 <i class="fa fa-undo" aria-hidden="true"></i>
@@ -167,7 +169,43 @@ var AppView = Backbone.View.extend({
       tbody += `
         </tbody>
       `;
-    }
+    } else if(this.pdfType == 'free-course'){
+    tbody = `
+      <thead>
+        <tr>
+          <th scope="col">#</th>
+          <th scope="col">Apellidos</th>
+          <th scope="col">Nombres</th>
+          <th scope="col">Correo</th>
+          <th scope="col">Acciones</th>
+          <th scope="col">Resultado</th>
+        </tr>
+      </thead>
+      <tbody>
+    `;
+    var i = 0;
+    this.students.forEach(student => {
+      console.log(student)
+      tbody += `
+        <tr model-id="${student.get('id')}">
+          <th>${++i}</th>
+          <td>${student.get('last_names')}</td>
+          <td>${student.get('first_names')}</td>
+          <td>${student.get('email')}</td>
+          <td>
+            <button type="button" class="btn btn-info btn-resend">
+              <i class="fa fa-undo" aria-hidden="true"></i>
+                Reennviar
+            </button>
+          </td>
+          <td>Envio Pendiente</td>
+        </tr>
+      `;
+    });
+    tbody += `
+      </tbody>
+    `;
+  }
     $('#studentTable').append(tbody);
   },
   selectPDF: function(event){
@@ -283,7 +321,11 @@ var AppView = Backbone.View.extend({
           var resp = JSON.parse(data);
           _this.folderPDF = resp.folder;
           _this.basePDFUploaded = resp.name;
-          _this.sendStudents();
+          if(_this.pdfType != 'certified'){
+            _this.sendStudents();
+          }else{
+            alert('mostrar carpeta')
+          }
         },
         error: function(xhr, status, error){
           console.error(xhr.responseText);
@@ -303,6 +345,7 @@ var AppView = Backbone.View.extend({
         data: JSON.stringify(_this.students.toJSON()),
         file: _this.basePDFUploaded,
         folder: _this.folderPDF,
+        type: _this.pdfType, 
       },
       headers: {
         // [CSRF_KEY]: CSRF,

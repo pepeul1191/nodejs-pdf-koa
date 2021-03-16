@@ -25,3 +25,5 @@ Fuentes:
 + https://support.google.com/mail/answer/185833?hl=es-419
 + https://stackoverflow.com/questions/35541864/es6-export-default-function
 + https://www.npmjs.com/package/koa-websocket
++ https://stackoverflow.com/questions/26223936/open-a-web-page-in-a-windows-batch-file 
++ https://www.windowscentral.com/how-create-and-run-batch-file-windows-10

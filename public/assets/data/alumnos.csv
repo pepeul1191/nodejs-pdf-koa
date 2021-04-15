@@ -1,4 +1,3 @@
-Apellidos:Nombres:Correo:Nota
-Valdivia:Pepe:pepe.valdivia.caballero@gmail.com:14
-Ramirez:Yacky:pepe.valdivia.caballero@gmail.com:20
-Esculapia:Sila:pepe.valdivia.caballero@gmail.com:18
+Apellidos,Nombres,Correo,Nota,Codigo,Asunto
+Esculapia,Sila,pepe.valdivia.caballero@gmail.com,13,PP-03,Sili
+Easseby,Fred,feasseby0@webs.com,15,PP-02,Fred E.

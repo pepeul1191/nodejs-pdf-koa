@@ -79,6 +79,7 @@ var AppView = Backbone.View.extend({
               email: dataArray[2],
               grade: dataArray[3],
               code: dataArray[4],
+              subject: dataArray[5],
             });
             _this.students.add(student);  
           }
@@ -100,6 +101,7 @@ var AppView = Backbone.View.extend({
             <th scope="col">Apellidos</th>
             <th scope="col">Nombres</th>
             <th scope="col">Correo</th>
+            <th scope="col">Asunto</th>
             <th class="text-center" scope="col">Nota</th>
             <th class="text-center" scope="col">Cód. de Registro</th>
             <th scope="col">Acciones</th>
@@ -116,6 +118,7 @@ var AppView = Backbone.View.extend({
             <td>${student.get('last_names')}</td>
             <td>${student.get('first_names')}</td>
             <td>${student.get('email')}</td>
+            <td>${student.get('subject')}</td>
             <td class="text-center">${student.get('grade')}</td>
             <td class="text-center">${student.get('code')}</td>
             <td>
@@ -139,6 +142,7 @@ var AppView = Backbone.View.extend({
             <th scope="col">Apellidos</th>
             <th scope="col">Nombres</th>
             <th scope="col">Correo</th>
+            <th scope="col">Asunto</th>
             <th class="text-center" scope="col">Registro</th>
             <th scope="col">Acciones</th>
             <th scope="col">Resultado</th>
@@ -155,6 +159,7 @@ var AppView = Backbone.View.extend({
             <td>${student.get('last_names')}</td>
             <td>${student.get('first_names')}</td>
             <td>${student.get('email')}</td>
+            <td>${student.get('subject')}</td>
             <td class="text-center">${student.get('code')}</td>
             <td>
               <button type="button" class="btn btn-info btn-resend">
@@ -177,6 +182,7 @@ var AppView = Backbone.View.extend({
           <th scope="col">Apellidos</th>
           <th scope="col">Nombres</th>
           <th scope="col">Correo</th>
+          <th scope="col">Asunto</th>
           <th scope="col">Acciones</th>
           <th scope="col">Resultado</th>
         </tr>
@@ -185,13 +191,14 @@ var AppView = Backbone.View.extend({
     `;
     var i = 0;
     this.students.forEach(student => {
-      console.log(student)
+      // console.log(student)
       tbody += `
         <tr model-id="${student.get('id')}">
           <th>${++i}</th>
           <td>${student.get('last_names')}</td>
           <td>${student.get('first_names')}</td>
           <td>${student.get('email')}</td>
+          <td>${student.get('subject')}</td>
           <td>
             <button type="button" class="btn btn-info btn-resend">
               <i class="fa fa-undo" aria-hidden="true"></i>

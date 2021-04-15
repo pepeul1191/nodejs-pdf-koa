@@ -50,41 +50,49 @@ export async function sendPDF(student, folder, baseFile, type) {
   // const { width, height } = firstPage.getSize()
   // student name -> certified, course, free-course
   firstPage.drawText(`${student.last_names} ${student.first_names}`, {
-    x: 300,
-    y: 318,
-    size: 19,
+    x: 900,
+    y: 940,
+    size: 60,
     font: helveticaFont,
     //color: rgb(0.95, 0.1, 0.1),
-    rotate: degrees(90),
+    //rotate: degrees(90),
   })
   const secondPage = pages[1]
   // student grade -> certificate, course
   if(type == 'certified'){
     secondPage.drawText(student.grade.toString(), {
-      x: 345,
-      y: 795,
+      x: 2150,
+      y: 700,
+      size: 200,
+      font: helveticaFont,
+      //color: rgb(0.95, 0.1, 0.1),
+      //rotate: degrees(90),
+    })
+    secondPage.drawText(student.code.toString(), {
+      x: 2170,
+      y: 1130,
       size: 60,
       font: helveticaFont,
       //color: rgb(0.95, 0.1, 0.1),
-      rotate: degrees(90),
+      //rotate: degrees(90),
     })
   }
-  // student code -> certified, course
-  if(type == 'certified' || type == 'course'){
+  // student code -> course
+  if(type == 'course'){
     secondPage.drawText(student.code.toString(), {
-      x: 345,
-      y: 695,
+      x: 2270,
+      y: 980,
       size: 60,
       font: helveticaFont,
       //color: rgb(0.95, 0.1, 0.1),
-      rotate: degrees(90),
+      //rotate: degrees(90),
     })
   }
   const pdfBytes = await pdfDoc.save();
   const file = `${folder}${student.last_names} ${student.first_names}.pdf`;
   fs.writeFileSync(file, pdfBytes);
   if(type != 'certified'){
-    await sendEmail(student.email, `${student.last_names} ${student.first_names}`, file, type)
+    // await sendEmail(student.email, `${student.last_names} ${student.first_names}`, file, type)
   }
 }
 

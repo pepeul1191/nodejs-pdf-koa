@@ -24,13 +24,29 @@ async function sendEmail(email, subject, name, attachedFile, type){
   // template
   var compiled = _.template(mailTemplate);
   // send mail with defined transport object
+  /*
+  <option value="course"><!--Curso de Cortesía-->Curso Grabado</option>
+  <option value="free-course"><!--Curso Libre-->Curso en Vivo</option>
+  */
+  if(type == 'certified'){
+    type = 'Diplomado';
+  }
+  if(type == 'course'){
+    type = 'Curso Grabado';
+  }
+  if(type == 'free-course'){
+    type = 'Curso En Vivo';
+  }
   let info = await transporter.sendMail({
     from: '"Legis Juristas" <info@legisjuristas.com>', // sender address
     to: email, // list of receivers
     subject: `Gracias por su preferencia ${subject}`, // Subject line
     //text: 'Hello world?', // plain text body
     html: compiled({
-      name: name
+      name: name,
+      type: type,
+      base_url: 'http://legisjuristas.com/',
+      subject: subject,
     }), // html body
     attachments: [
       {   
@@ -49,7 +65,7 @@ export async function sendPDF(student, folder, baseFile, type) {
   const firstPage = pages[0]
   // const { width, height } = firstPage.getSize()
   // student name -> certified, course, free-course
-  firstPage.drawText(`${student.last_names} ${student.first_names}`, {
+  firstPage.drawText(`${student.last_names} ${student.first_names}`.toUpperCase(), {
     x: 900,
     y: 940,
     size: 60,

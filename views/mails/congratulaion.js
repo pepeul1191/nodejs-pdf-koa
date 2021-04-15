@@ -338,9 +338,9 @@ module.exports = `
 									<tr>
 										<td>
 											<div class="text" style="padding: 0 3em; text-align: center;">
-												<h2>Hola <%= name %></h2>
-												<p>Muchas gracias por contactarnos.</p>
-												<p><a href="%base_url" class="btn btn-primary bg_primary">Ir al sitio web del Legis Juristas</a></p>
+												<h2>Hola <%= subject %></h2>
+												<p>Muchas gracias por su preferencia.</p>
+												<p><a href="<%= base_url %>" class="btn btn-primary bg_primary">Ir al sitio web del Legis Juristas</a></p>
 											</div>
 										</td>
 									</tr>
@@ -356,8 +356,8 @@ module.exports = `
 										<td class="bg_white email-section" style="text-align:center;">
 											<div class="heading-section heading-section-white">
 												<span class="subheading color_gray"></span>
-												<h2 class="color_gray">Bienvenido</h2>
-												<p class="color_gray">En breve un asesor de servicios se contactará con usted para resolver sus consultas</p>
+												<h2 class="color_gray" style="font-size:28px;">Bienvenido</h2>
+												<p class="color_gray" style="font-size:24px;">Felicitaciones por haber culminado satisfactoriamente el curso de especialización. <br>Su certificado se encuentra adjunto en el presente correo.</p>
 											</div>
 										</td>
 									</tr>
@@ -403,10 +403,10 @@ module.exports = `
 				<td style="text-align: left; padding-left: 10px;">
 				<h3 class="heading">Enlaces</h3>
 				<ul>
-					<li><a href="%base_url">Home</a></li>
-					<li><a href="%base_urlnosotros">Nostros</a></li>
-					<li><a href="%base_urlcapacitaciones">Capacitaciones</a></li>
-					<li><a href="%base_urlponentes">Ponentes</a></li>
+					<li><a href="<%= base_url %>">Home</a></li>
+					<li><a href="<%= base_url %>nosotros">Nostros</a></li>
+					<li><a href="<%= base_url %>capacitaciones">Capacitaciones</a></li>
+					<li><a href="<%= base_url %>ponentes">Ponentes</a></li>
 				</ul>
 				</td>
 				</tr>

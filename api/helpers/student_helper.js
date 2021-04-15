@@ -83,7 +83,9 @@ export async function sendPDF(student, folder, baseFile, type) {
   const pdfBytes = await pdfDoc.save();
   const file = `${folder}${student.last_names} ${student.first_names}.pdf`;
   fs.writeFileSync(file, pdfBytes);
-  await sendEmail(student.email, `${student.last_names} ${student.first_names}`, file, type)
+  if(type != 'certified'){
+    await sendEmail(student.email, `${student.last_names} ${student.first_names}`, file, type)
+  }
 }
 
 export const indexCss = () => {

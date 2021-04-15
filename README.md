@@ -27,3 +27,4 @@ Fuentes:
 + https://www.npmjs.com/package/koa-websocket
 + https://stackoverflow.com/questions/26223936/open-a-web-page-in-a-windows-batch-file 
 + https://www.windowscentral.com/how-create-and-run-batch-file-windows-10
++ https://stackoverflow.com/questions/66091490/pdf-lib-how-to-add-custom-font

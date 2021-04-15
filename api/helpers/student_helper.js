@@ -1,6 +1,8 @@
 import { PDFDocument, StandardFonts, degrees } from 'pdf-lib'
+import fontkit from '@pdf-lib/fontkit';
 import fs from 'fs'
 import dotenv from 'dotenv'
+import path from 'path'
 import nodemailer from 'nodemailer'
 import constants from '../../config/constants'
 import mailTemplate from '../../views/mails/congratulaion'
@@ -60,16 +62,20 @@ async function sendEmail(email, subject, name, attachedFile, type){
 export async function sendPDF(student, folder, baseFile, type) {
   const existingPdfBytes = await fs.readFileSync(`${folder}${baseFile}`);
   const pdfDoc = await PDFDocument.load(existingPdfBytes)
-  const helveticaFont = await pdfDoc.embedFont(StandardFonts.Helvetica)
+  // const helveticaFont = await pdfDoc.embedFont(StandardFonts.Helvetica)
   const pages = pdfDoc.getPages()
   const firstPage = pages[0]
   // const { width, height } = firstPage.getSize()
+  pdfDoc.registerFontkit(fontkit);
+  //load font and embed it to pdf document
+  const fontBytes = fs.readFileSync(path.join(path.dirname(require.main.filename), 'public', 'assets', 'fonts', 'Palatino Linotype.ttf'));
+  const customFont = await pdfDoc.embedFont(fontBytes);
   // student name -> certified, course, free-course
   firstPage.drawText(`${student.last_names} ${student.first_names}`.toUpperCase(), {
     x: 900,
-    y: 940,
+    y: 930,
     size: 60,
-    font: helveticaFont,
+    font: customFont,
     //color: rgb(0.95, 0.1, 0.1),
     //rotate: degrees(90),
   })
@@ -80,7 +86,7 @@ export async function sendPDF(student, folder, baseFile, type) {
       x: 2150,
       y: 700,
       size: 200,
-      font: helveticaFont,
+      font: customFont,
       //color: rgb(0.95, 0.1, 0.1),
       //rotate: degrees(90),
     })
@@ -88,7 +94,7 @@ export async function sendPDF(student, folder, baseFile, type) {
       x: 2170,
       y: 1130,
       size: 60,
-      font: helveticaFont,
+      font: customFont,
       //color: rgb(0.95, 0.1, 0.1),
       //rotate: degrees(90),
     })
@@ -99,7 +105,7 @@ export async function sendPDF(student, folder, baseFile, type) {
       x: 2270,
       y: 980,
       size: 60,
-      font: helveticaFont,
+      font: customFont,
       //color: rgb(0.95, 0.1, 0.1),
       //rotate: degrees(90),
     })

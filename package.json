@@ -16,6 +16,7 @@
   "author": "Pepe Valdivia",
   "license": "ISC",
   "dependencies": {
+    "@pdf-lib/fontkit": "^1.1.1",
     "dotenv": "^8.2.0",
     "fs": "^0.0.1-security",
     "fs-extra": "^9.1.0",

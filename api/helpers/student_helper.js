@@ -6,7 +6,7 @@ import constants from '../../config/constants'
 import mailTemplate from '../../views/mails/congratulaion'
 import _ from 'underscore'
 
-async function sendEmail(email, name, attachedFile, type){
+async function sendEmail(email, subject, name, attachedFile, type){
   dotenv.config();
   let transporter = nodemailer.createTransport({
     secure: false,//true
@@ -27,7 +27,7 @@ async function sendEmail(email, name, attachedFile, type){
   let info = await transporter.sendMail({
     from: '"Legis Juristas" <info@legisjuristas.com>', // sender address
     to: email, // list of receivers
-    subject: `Felicitaciones ${name}!!!`, // Subject line
+    subject: `Gracias por su preferencia ${subject}`, // Subject line
     //text: 'Hello world?', // plain text body
     html: compiled({
       name: name
@@ -92,7 +92,7 @@ export async function sendPDF(student, folder, baseFile, type) {
   const file = `${folder}${student.last_names} ${student.first_names}.pdf`;
   fs.writeFileSync(file, pdfBytes);
   if(type != 'certified'){
-    // await sendEmail(student.email, `${student.last_names} ${student.first_names}`, file, type)
+    await sendEmail(student.email, student.subject, `${student.last_names} ${student.first_names}`, file, type)
   }
 }
 

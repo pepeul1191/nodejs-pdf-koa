@@ -71,9 +71,11 @@ export async function sendPDF(student, folder, baseFile, type) {
   const fontBytes = fs.readFileSync(path.join(path.dirname(require.main.filename), 'public', 'assets', 'fonts', 'Palatino Linotype.ttf'));
   const customFont = await pdfDoc.embedFont(fontBytes);
   // student name -> certified, course, free-course
+  // nama starts at 500, ends at 2400
+  let pixelNameLength = (`${student.last_names} ${student.first_names}`).length * 22;
   firstPage.drawText(`${student.last_names} ${student.first_names}`.toUpperCase(), {
-    x: 900,
-    y: 930,
+    x: (250 + (1900 - pixelNameLength) / 2),
+    y: 925,
     size: 60,
     font: customFont,
     //color: rgb(0.95, 0.1, 0.1),

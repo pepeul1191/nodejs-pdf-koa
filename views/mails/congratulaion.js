@@ -357,7 +357,7 @@ module.exports = `
 											<div class="heading-section heading-section-white">
 												<span class="subheading color_gray"></span>
 												<h2 class="color_gray" style="font-size:28px;">Felicitaciones</h2>
-												<p class="color_gray" style="font-size:24px;">por haber culminado satisfactoriamente el curso de especialización. <br>Su certificado se encuentra adjunto en el presente correo.</p>
+												<p class="color_gray" style="font-size:24px;">Por haber culminado satisfactoriamente el curso de especialización. <br>Su certificado se encuentra adjunto en el presente correo.</p>
 											</div>
 										</td>
 									</tr>

@@ -42,7 +42,7 @@ async function sendEmail(email, subject, name, attachedFile, type){
   let info = await transporter.sendMail({
     from: '"Legis Juristas" <info@legisjuristas.com>', // sender address
     to: email, // list of receivers
-    subject: `Gracias por su preferencia ${subject}`, // Subject line
+    subject: `Felicitaciones ${subject}`, // Subject line
     //text: 'Hello world?', // plain text body
     html: compiled({
       name: name,

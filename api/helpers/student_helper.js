@@ -68,15 +68,15 @@ export async function sendPDF(student, folder, baseFile, type) {
   // const { width, height } = firstPage.getSize()
   pdfDoc.registerFontkit(fontkit);
   //load font and embed it to pdf document
-  const fontBytes = fs.readFileSync(path.join(path.dirname(require.main.filename), 'public', 'assets', 'fonts', 'Palatino Linotype.ttf'));
+  const fontBytes = fs.readFileSync(path.join(path.dirname(require.main.filename), 'public', 'assets', 'fonts', 'GreatVibes-Regular.ttf'));
   const customFont = await pdfDoc.embedFont(fontBytes);
   // student name -> certified, course, free-course
   // nama starts at 500, ends at 2400
-  let pixelNameLength = (`${student.last_names} ${student.first_names}`).length * 22;
-  firstPage.drawText(`${student.last_names} ${student.first_names}`.toUpperCase(), {
-    x: (250 + (1900 - pixelNameLength) / 2),
-    y: 925,
-    size: 60,
+  let pixelNameLength = customFont.widthOfTextAtSize(`${student.last_names} ${student.first_names}`, 48);
+  firstPage.drawText(`${student.last_names} ${student.first_names}`, {
+    x: ((firstPage.getWidth() - pixelNameLength) / 2),
+    y: firstPage.getHeight() - 340,
+    size: 48,
     font: customFont,
     //color: rgb(0.95, 0.1, 0.1),
     //rotate: degrees(90),
@@ -116,7 +116,7 @@ export async function sendPDF(student, folder, baseFile, type) {
   const file = `${folder}${student.last_names} ${student.first_names}.pdf`;
   fs.writeFileSync(file, pdfBytes);
   if(type != 'certified'){
-    await sendEmail(student.email, student.subject, `${student.last_names} ${student.first_names}`, file, type)
+    //await sendEmail(student.email, student.subject, `${student.last_names} ${student.first_names}`, file, type)
   }
 }
 
